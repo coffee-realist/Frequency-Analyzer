@@ -18,22 +18,26 @@ public class MultiReader extends Reader {
     }
 
     public int read() throws IOException {
-        if (reader_index >= readers.length) return -1;
-        int next = readers[reader_index].read();
-        if (next != -1) {
-            return next;
-        } else if (++reader_index < readers.length) {
-            readers[reader_index - 1].close();
-            return readers[reader_index].read();
-        } else {
-            readers[reader_index - 1].close();
+        char[] cb = new char[1];
+        if (read(cb, 0, 1) == -1)
             return -1;
-        }
+        else
+            return cb[0];
     }
 
     @Override
     public int read(char[] c_buf, int off, int len) throws IOException {
-        return this.read();
+        if (reader_index >= readers.length) return -1;
+        int next = readers[reader_index].read(c_buf, off, len);
+        if (next != -1) {
+            return next;
+        } else if (++reader_index < readers.length) {
+            readers[reader_index - 1].close();
+            return readers[reader_index].read(c_buf, off, len);
+        } else {
+            readers[reader_index - 1].close();
+            return -1;
+        }
     }
 
     @Override

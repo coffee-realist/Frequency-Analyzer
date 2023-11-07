@@ -4,44 +4,57 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-public class HorizontalPlot extends Writer {
+public class HorizontalPlot extends Plot{
     private final int width, height;
-    private final Result result;
     private final Writer writer;
 
-    public HorizontalPlot(Result result, Writer writer, int width, int height) {
+    public HorizontalPlot(Writer writer, int width, int height) {
         this.width = width;
         this.height = height;
-        this.result = result;
         this.writer = writer;
     }
 
-    public void write() throws IOException {
+    @Override
+    public void write(Result result) throws IOException {
         writer.write(String.format("%" + width + "s__\n", "_").replace(' ', '_'));
         int max = result.getMaxFrequency();
         int[] frequencies = new int[height + 1];
-        int[] positions = new int[width - 6];
-        StringBuilder chars = new StringBuilder();
+        int[] positions = new int[width - 10];
         int i = 0;
         for (Map.Entry<Character, Integer> current_letter : result.getList()) {
-            if (i > width - 7) break;
+            if (i > width - 11) break;
             int num_of_blocks = (int) ((double) current_letter.getValue() / max * (height - 1)) + 1;
             frequencies[num_of_blocks] = current_letter.getValue();
             positions[i] = num_of_blocks;
-            chars.append(current_letter.getKey());
             i++;
         }
 
         for (i = 0; i < height; i++) {
-            writer.write(String.format("%-6d|", frequencies[height - i]).replace("0    ", "     "));
-            for (int j = 0; j < width - 6; j++) {
+            writer.write(String.format("%-10d|", frequencies[height - i]).replace("0      ", "       "));
+            for (int j = 0; j < width - 10; j++) {
                 if (positions[j] >= height - i)
                     writer.write('█');
                 else writer.write(' ');
             }
             writer.write("|\n");
         }
-        writer.write(String.format("------|%s|%s", chars, "-".repeat(width - 6 - chars.length())));
+        writer.write("----------|");
+        i = 0;
+        int num_of_chars = 0;
+        for (Map.Entry<Character, Integer> current_letter : result.getList()) {
+            if (i > width-11) break;
+            if (current_letter.getKey() == '\n')
+                writer.write('¶');
+            else if (current_letter.getKey() == '\r')
+                writer.write('◄');
+            else if (current_letter.getKey() == '\t')
+                writer.write('⇥');
+            else
+                writer.write(current_letter.getKey());
+            i++;
+            num_of_chars++;
+        }
+        writer.write(String.format("|%s", "-".repeat(width - 10 - num_of_chars)));
         writer.write('\n');
         close();
     }

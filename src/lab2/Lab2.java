@@ -44,27 +44,24 @@ public class Lab2 {
         }
         Params params = builder.build();
         Writer writer;
-        if (params.output_file == null)
+        if (params.getOutputFile() == null)
             writer = new BufferedWriter(new OutputStreamWriter(System.out));
         else
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(params.output_file)));
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(params.getOutputFile())));
         Analyzer analyzer = new Analyzer();
-        MultiReader reader = new MultiReader(params.input_files.toArray(new File[0]));
+        MultiReader reader = new MultiReader(params.getInputFiles());
         Result result = analyzer.analyze(reader, params.only_letters, params.ignore_case);
-        Writer plot;
+        Plot plot;
         if (params.orientation)
-            plot = new VerticalPlot(result, writer, width, height);
+            plot = new VerticalPlot(writer, width, height);
         else
-            plot = new HorizontalPlot(result, writer, width, height);
+            plot = new HorizontalPlot(writer, width, height);
         if (params.sort_by_letters)
             result.sortByLetters();
         else
             result.sortByFrequency();
         if (params.value_orientation)
-            result.ascending();
-        if (plot instanceof VerticalPlot)
-            ((VerticalPlot) plot).write();
-        else
-            ((HorizontalPlot) plot).write();
+            result.reverse();
+        plot.write(result);
     }
 }

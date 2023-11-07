@@ -23,7 +23,7 @@ public final class Result {
     }
 
     public List<Map.Entry<Character, Integer>> getList() {
-        return list;
+        return List.copyOf(list);
     }
 
     public Result sortByLetters() {
@@ -36,7 +36,7 @@ public final class Result {
         return this;
     }
 
-    public Result ascending() {
+    public Result reverse() {
         Collections.reverse(list);
         return this;
     }

@@ -1,11 +1,14 @@
 package lab2;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public final class Params {
-    public final ArrayList<File> input_files;
+    private final File[] input_files;
     public final File output_file;
     public final boolean only_letters;
     public final boolean orientation;
@@ -15,7 +18,7 @@ public final class Params {
 
     public Params(File[] inputFiles, File output_file, boolean orientation, boolean only_letters,
                   boolean ignore_case, boolean sort_by_letters, boolean value_orientation) {
-        this.input_files = new ArrayList<>(List.of(inputFiles));
+        this.input_files = inputFiles;
         this.output_file = output_file;
         this.orientation = orientation;
         this.only_letters = only_letters;
@@ -24,8 +27,16 @@ public final class Params {
         this.value_orientation = value_orientation;
     }
 
+    public File[] getInputFiles() {
+        return Arrays.copyOf(input_files, input_files.length);
+    }
+
+    public File getOutputFile() {
+        return output_file;
+    }
+
     static class Builder {
-        private ArrayList<File> input_files = new ArrayList<>();
+        private final ArrayList<File> input_files = new ArrayList<>();
         private File output_file = null;
         private boolean only_letters = false;
         private boolean orientation = false;
@@ -35,11 +46,6 @@ public final class Params {
 
         public Builder addInputFile(File inputFile) {
             input_files.add(inputFile);
-            return this;
-        }
-
-        public Builder addInputFiles(File[] inputFiles) {
-            this.input_files = new ArrayList<>(List.of(inputFiles));
             return this;
         }
 

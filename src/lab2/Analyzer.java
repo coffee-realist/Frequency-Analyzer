@@ -15,11 +15,6 @@ public class Analyzer {
                 continue;
             if (ignoreCase && Character.isUpperCase(character))
                 character = Character.toLowerCase(character);
-            character = switch ((char) character) {
-                case '\n', '\r' -> '¶';
-                case '\t' -> '⇥';
-                default -> character;
-            };
             map.putIfAbsent((char) character, 0);
             map.put((char) character, map.get((char) character) + 1);
         }

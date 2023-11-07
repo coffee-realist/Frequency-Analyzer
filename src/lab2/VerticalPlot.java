@@ -4,19 +4,17 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-public class VerticalPlot extends Writer {
+public class VerticalPlot extends Plot{
     private final int width, height;
-    private final Result result;
     private final Writer writer;
 
-    public VerticalPlot(Result result, Writer writer, int width, int height) {
+    public VerticalPlot(Writer writer, int width, int height) {
         this.width = width;
         this.height = height;
-        this.result = result;
         this.writer = writer;
     }
-
-    public void write() throws IOException {
+    @Override
+    public void write(Result result) throws IOException {
         writer.write(String.format("%" + width + "s\n", "-").replace(' ', '-'));
         int max = result.getMaxFrequency();
         int i = 0;
@@ -24,8 +22,17 @@ public class VerticalPlot extends Writer {
             if (i > height - 3) break;
             int num_of_blocks = (int) ((double) current_letter.getValue() / max * (width - 12));
             num_of_blocks = (num_of_blocks == 0) ? 1 : num_of_blocks;
-            writer.write(String.format("%c:  %-8d|", current_letter.getKey(), current_letter.getValue()));
-            writer.write(String.format("%" + num_of_blocks + "s\n", " ").replace(' ', '█'));
+            if (current_letter.getKey() == '\n')
+                writer.write('¶');
+            else if (current_letter.getKey() == '\r')
+                writer.write('◄');
+            else if (current_letter.getKey() == '\t')
+                writer.write('⇥');
+            else
+                writer.write(current_letter.getKey());
+            writer.write(String.format(":  %-8d|", current_letter.getValue()));
+            writer.write("█".repeat(num_of_blocks));
+            writer.write('\n');
             i++;
         }
         writer.write(String.format("%" + width + "s", "-").replace(' ', '-'));
