@@ -60,7 +60,7 @@ public class Lab2 {
             result.sortByLetters();
         else
             result.sortByFrequency();
-        if (params.value_orientation)
+        if (!params.value_orientation)
             result.reverse();
         plot.write(result);
     }

@@ -1,9 +1,6 @@
 package lab2;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class Result {
     private final List<Map.Entry<Character, Integer>> list;
@@ -32,7 +29,7 @@ public final class Result {
     }
 
     public Result sortByFrequency() {
-        list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
+        list.sort(Map.Entry.comparingByValue());
         return this;
     }
 

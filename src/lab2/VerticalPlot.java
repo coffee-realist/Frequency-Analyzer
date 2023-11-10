@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-public class VerticalPlot extends Plot{
+public class VerticalPlot extends Plot {
     private final int width, height;
-    private final Writer writer;
 
     public VerticalPlot(Writer writer, int width, int height) {
+        super(writer);
         this.width = width;
         this.height = height;
-        this.writer = writer;
     }
+
     @Override
     public void write(Result result) throws IOException {
         writer.write(String.format("%" + width + "s\n", "-").replace(' ', '-'));
@@ -39,20 +39,4 @@ public class VerticalPlot extends Plot{
         writer.write('\n');
         close();
     }
-
-    @Override
-    public void write(char[] c_buf, int off, int len) throws IOException {
-        writer.write(c_buf, off, len);
-    }
-
-    @Override
-    public void flush() throws IOException {
-        writer.flush();
-    }
-
-    @Override
-    public void close() throws IOException {
-        writer.close();
-    }
-
 }
