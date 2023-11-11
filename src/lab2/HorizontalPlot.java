@@ -19,6 +19,8 @@ public class HorizontalPlot extends Plot {
         writer.write(String.format("%" + width + "s__\n", "_").replace(' ', '_'));
         int max = result.getMaxFrequency();
         int[] frequencies = new int[height + 1];
+        // переменная, отвечающая за то, сколько символов будет отведено для записи частоты каждой буквы;
+        // в данном случае максимальная длина типа данных int составляет 10 символов
         int size_of_frequency_for_one_number = 10;
         int[] positions = new int[width - size_of_frequency_for_one_number];
         int i = 0;
