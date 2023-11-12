@@ -20,8 +20,7 @@ public class HorizontalPlot extends Plot {
         int max = result.getMaxFrequency();
         int[] frequencies = new int[height + 1];
         // переменная, отвечающая за то, сколько символов будет отведено для записи частоты каждой буквы;
-        // в данном случае максимальная длина типа данных int составляет 10 символов
-        int size_of_frequency_for_one_number = 10;
+        int size_of_frequency_for_one_number = String.valueOf(max).length();
         int[] positions = new int[width - size_of_frequency_for_one_number];
         int i = 0;
         for (Map.Entry<Character, Integer> current_letter : result.getList()) {
@@ -33,7 +32,8 @@ public class HorizontalPlot extends Plot {
         }
 
         for (i = 0; i < height; i++) {
-            writer.write(String.format("%-10d|", frequencies[height - i]).replace("0      ", "       "));
+            writer.write(String.format("%-" + size_of_frequency_for_one_number + "d|",
+                    frequencies[height - i]).replace("0    ", "     "));
             for (int j = 0; j < width - size_of_frequency_for_one_number; j++) {
                 if (positions[j] >= height - i)
                     writer.write('█');
@@ -41,7 +41,8 @@ public class HorizontalPlot extends Plot {
             }
             writer.write("|\n");
         }
-        writer.write("----------|");
+        writer.write("-".repeat(size_of_frequency_for_one_number));
+        writer.write("|");
         i = 0;
         int num_of_chars = 0;
         for (Map.Entry<Character, Integer> current_letter : result.getList()) {
